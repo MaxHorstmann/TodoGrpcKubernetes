@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package todo;
+
+option go_package = "https://github.com/MaxHorstmann/TodoGrpcKubernetes/todo";
+
+service todos {
+    rpc AddTodo (Todo) returns (AddTodoReply) {}
+}
+
+message Todo {
+    string task = 1;
+    bool done = 2;
+}
+
+message AddTodoReply {
+    string something = 1;
+}
