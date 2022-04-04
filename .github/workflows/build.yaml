@@ -1,4 +1,4 @@
-name: PRCustodian
+name: build
 on: push
 jobs:
 
