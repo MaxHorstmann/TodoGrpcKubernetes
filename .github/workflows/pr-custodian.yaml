@@ -1,0 +1,14 @@
+name: PRCustodian
+on: push
+jobs:
+
+  proto-compile:
+    name: Compile proto
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: protoc
+      run: protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative todo/services.proto
