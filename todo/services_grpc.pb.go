@@ -97,5 +97,5 @@ var Todos_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "services.proto",
+	Metadata: "todo/services.proto",
 }
