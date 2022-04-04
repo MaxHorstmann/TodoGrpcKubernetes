@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: todo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql
+  labels:
+    service: sql
+  namespace: todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: sql
+  template:
+    metadata:
+      labels:
+        service: sql
+    spec:
+      # https://docs.microsoft.com/en-us/sql/linux/tutorial-sql-server-containers-kubernetes?view=sql-server-ver15#create-the-deployment
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 10001
+      containers:
+      - name: sql
+        image: mcr.microsoft.com/mssql/server:latest
+        ports:
+        - containerPort: 1433
+        resources:
+          requests:
+            memory: "2Gi"
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: MSSQL_PID
+          value: "Enterprise"
+        - name: SA_PASSWORD
+          value: "Password1!"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sql
+  labels:
+    service: sql
+  namespace: todo
+spec:
+  selector:
+    service: sql
+  ports:
+  - name: "1433"
+    port: 1433
+    targetPort: 1433
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo
+  labels:
+    service: todo
+  namespace: todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: todo
+  template:
+    metadata:
+      labels:
+        service: todo
+    spec:
+      containers:
+      - name: todo
+        image: maxhorstmann/todo
+        ports:
+        - containerPort: 80
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo
+  labels:
+    service: todo
+  namespace: todo
+spec:
+  selector:
+    service: todo
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  rules:
+  - host:  foo.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: todo
+            port:
+              number: 80
+ 
