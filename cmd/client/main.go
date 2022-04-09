@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/MaxHorstmann/TodoGrpcKubernetes/todo"
+	pb "github.com/MaxHorstmann/TodoGrpcKubernetes/pkg/todo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
