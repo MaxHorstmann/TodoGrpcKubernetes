@@ -91,9 +91,49 @@ spec:
   selector:
     service: todo
   ports:
+  - name: "1234"
+    port: 1234
+    targetPort: 1234
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpcui
+  labels:
+    service: grpcui
+  namespace: todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: grpcui
+  template:
+    metadata:
+      labels:
+        service: grpcui
+    spec:
+      containers:
+      - name: grpcui
+        image: fullstorydev/grpcui
+        args: ["-plaintext", "todo:1234"]
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpcui
+  labels:
+    service: grpcui
+  namespace: todo
+spec:
+  selector:
+    service: grpcui
+  ports:
   - name: "80"
     port: 80
-    targetPort: 80
+    targetPort: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -108,7 +148,7 @@ spec:
         path: "/"
         backend:
           service:
-            name: todo
+            name: grpcui
             port:
               number: 80
  
