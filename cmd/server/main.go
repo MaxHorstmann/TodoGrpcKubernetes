@@ -18,7 +18,8 @@ type todoserver struct {
 func (s *todoserver) AddTodo(ctx context.Context, todo *pb.Todo) (reply *pb.AddTodoReply, err error) {
 	fmt.Println(todo.Task)
 	fmt.Println(todo.Done)
-	return nil, nil
+	fmt.Println("yes this is the new version")
+	return &pb.AddTodoReply{Something: "very nice"}, nil
 }
 
 func main() {
