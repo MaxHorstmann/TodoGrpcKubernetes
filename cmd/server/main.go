@@ -22,6 +22,10 @@ func (s *todoserver) AddTodo(ctx context.Context, todo *pb.Todo) (reply *pb.AddT
 	return &pb.AddTodoReply{Something: "very nice"}, nil
 }
 
+func (s *todoserver) GetAllTodos(ctx context.Context, todoParams *pb.GetAllTodosParams) (reply *pb.GetAllTodosResponse, err error) {
+	return &pb.GetAllTodosResponse{Response: []string{"first one", "second one", "third one"}}, nil
+}
+
 func main() {
 	fmt.Println("running")
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 1234))

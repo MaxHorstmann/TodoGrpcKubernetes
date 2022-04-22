@@ -6,6 +6,7 @@ option go_package = "https://github.com/MaxHorstmann/TodoGrpcKubernetes/todo";
 
 service todos {
     rpc AddTodo (Todo) returns (AddTodoReply) {}
+    rpc GetAllTodos (GetAllTodosParams) returns (GetAllTodosResponse) {}
 }
 
 message Todo {
@@ -13,6 +14,12 @@ message Todo {
     bool done = 2;
 }
 
+message GetAllTodosParams {}
+
 message AddTodoReply {
     string something = 1;
+}
+
+message GetAllTodosResponse {
+    repeated string response = 1;
 }
